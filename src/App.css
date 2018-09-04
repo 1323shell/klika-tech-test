@@ -1,0 +1,208 @@
+.app-container {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.playlist {
+  margin-right: 20px;
+}
+
+.playlist-table {
+  border: 2px solid grey;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #efefef;
+}
+
+td {
+  width: 170px;
+  padding: 10px;
+  border: 2px solid grey;
+  color: grey;
+}
+
+td:nth-child(3) {
+  width: 90px;
+}
+
+thead td {
+  position: relative;
+  user-select: none;
+  color: black;
+}
+
+thead td:hover,
+.playlist-length-item:hover,
+.playlist-page:hover,
+.arrow:hover,
+select:hover,
+select option {
+  cursor: pointer;
+}
+
+thead td:before,
+thead td:after {
+  position: absolute;
+  right: 8px;
+  font-size: 24px;
+  color: #b2b2b2;
+}
+
+thead td:before {
+  content: "▴";
+  top: -3px;
+}
+
+thead td:after {
+  content: "▾";
+  bottom: -3px;
+}
+
+.checked,
+.checked-again {
+  background-color: lightgrey;
+}
+
+.checked:after {
+  color: black;
+}
+
+.checked-again:before {
+  color: black;
+}
+
+.playlist-title,
+.filter-title {
+  font-size: 20px;
+  font-weight: normal;
+  color: grey;
+  margin-bottom: 10px;
+}
+
+.playlist-footer {
+  margin-top: 10px;
+}
+
+.playlist-footer-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.playlist-pages,
+.playlist-length {
+  display: flex;
+  align-items: center;
+}
+
+.playlist-length {
+  position: absolute;
+  right: 0;
+}
+
+.playlist-length-item {
+  border: 2px solid grey;
+  border-right: none;
+  color: grey;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.playlist-length-item:last-child {
+  border-right: 2px solid grey;
+}
+
+input:checked + .playlist-length-item {
+  background-color: #efefef;
+}
+
+.playlist-length input {
+  display: none;
+}
+
+.playlist-page,
+.arrow,
+.hidden-pages {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  vertical-align: middle;
+  color: grey;
+  border: 2px solid white;
+  border-radius: 50%;
+  user-select: none;
+}
+
+.playlist-page:hover {
+  border-color: grey;
+}
+
+.active-page {
+  background-color: #efefef;
+  border-color: grey;
+}
+
+.arrow {
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.back {
+  margin-right: 5px;
+}
+
+.forward {
+  margin-left: 5px;
+}
+
+.arrow:active {
+  background-color: #efefef;
+  border-color: grey;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #efefef;
+  padding: 10px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.filter-item:last-child {
+  margin-bottom: 0;
+}
+
+.filter-item-title {
+  font-size: 13px;
+}
+
+select {
+  width: 100%;
+  border: 2px solid grey;
+  padding: 5px;
+  font-weight: bold;
+  color: grey;
+}
+
+select:focus {
+  outline: none;
+}
+
+select option {
+  font-weight: bold;
+  color: grey;
+}

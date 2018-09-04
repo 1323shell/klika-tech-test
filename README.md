@@ -1,1 +1,1 @@
-Playlist with filers
+Playlist with filters
