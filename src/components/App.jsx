@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { firebaseData } from './firebase';
-import './App.css';
+import { firebaseData } from '../firebase.js';
+import '../App.css';
+import FiltersComponent from './Filters.jsx';
+import PlaylistFooterComponent from './PlaylistFooter.jsx';
 
 class App extends Component {
     constructor(props){
@@ -74,10 +76,10 @@ class App extends Component {
             singers — array of singers for <select> element,
             genres — array of genres for <select> element,
             years — array of years for <select> element,
+            sortField — name of the clicked field for sorting,
             selectedFiltersSinger — selected singer in the <select> element,
             selectedFiltersGenre — selected genre in the <select> element,
             selectedFiltersYear — selected year in the <select> element,
-            sortField — name of the clicked field for sorting,
             playlistLength — maximal number of songs that can be displayed in the playlist,
             songsStartPosition — number of the first song that is displayed in the playlist,
             songsEndPosition — number of the last song that is displayed in the playlist,
@@ -92,17 +94,17 @@ class App extends Component {
             singers: [],
             genres: [],
             years: [],
+            sortField: null,
             selectedFiltersSinger: null,
             selectedFiltersGenre: null,
             selectedFiltersYear: null,
-            sortField: null,
             playlistLength: 10,
             songsStartPosition: 0,
             songsEndPosition: 10,
             pageCount: 0,
             pageDisplayed: [],
             activePage: 1
-        }
+        };
     }
 
     /*sort the songs by the clicked field (singer, name of the song, genre, duration)*/
@@ -239,12 +241,13 @@ class App extends Component {
             break;
         }
 
-        /*reset "songsStartPosition", "songsEndPosition" and "activePage"*/
+        /*reset "songsStartPosition", "songsEndPosition", "activePage" and pageDisplayed*/
 
         this.setState({
             songsStartPosition: 0,
             songsEndPosition: this.state.playlistLength,
-            activePage: 1
+            activePage: 1,
+            pageDisplayed: this.pagination(this.state.playlistLength, this.state.songsFiltered)
         });
     }
 
@@ -253,7 +256,7 @@ class App extends Component {
     "filterName" — title of this <select> element;
     */
 
-    filterPlaylist(filter, filterName) {
+    filterPlaylist = (filter, filterName) => {
         /*reset styles for all fields (singers, name of the song, genres, duration)*/
 
         if (this.state.sortField) {
@@ -370,7 +373,7 @@ class App extends Component {
             pageCount: Math.ceil(newSongsFiltered.length / this.state.playlistLength),
             pageDisplayed: this.pagination(this.state.playlistLength, newSongsFiltered)
         });
-    }
+    };
 
     /*create new array of playlist's pages that are displayed, where
     "num" — maximal number of songs that can be displayed in the playlist
@@ -397,7 +400,7 @@ class App extends Component {
     "num" — maximal number of songs that can be displayed in the playlist
     */
 
-    playlistLengthChange(num) {
+    playlistLengthChange = (num) => {
         this.setState({
             playlistLength: num,
             songsStartPosition: 0,
@@ -406,7 +409,7 @@ class App extends Component {
             pageCount: Math.ceil(this.state.songsFiltered.length / num),
             pageDisplayed: this.pagination(num, this.state.songsFiltered)
         });
-    }
+    };
 
     /*if the amount of pages is more than 5 update the array of playlist's pages that are displayed, where
     "buttonName" — name of a pressed button;
@@ -487,7 +490,7 @@ class App extends Component {
 
     /*update the array of playlist's pages that are displayed*/
 
-    switchBetweenPages(e) {
+    switchBetweenPages = (e) => {
         let songsListLength = this.state.songsFiltered.length,
             playlistLength = this.state.playlistLength,
             start = this.state.songsStartPosition,
@@ -567,9 +570,9 @@ class App extends Component {
                 this.showHiddenPages('number', nextPage);
             }
         }
-    }
+    };
 
-  render() {
+    render() {
     return (
       <div className="app">
           {this.state.songs.length ?
@@ -603,100 +606,14 @@ class App extends Component {
                           </table>
                           <div className="playlist-footer">
                               {this.state.pageDisplayed.length ?
-                                  <div className="playlist-footer-container">
-                                      <div className="playlist-pages" onClick={(e) => this.switchBetweenPages(e)}>
-                                          <div className="arrow back">❮</div>
-                                          {this.state.pageDisplayed.map((page) => {
-                                              if (page === this.state.activePage) {
-                                                  return(<div key={Math.random()} className="playlist-page active-page">{page}</div>);
-                                              } else if(page === "...") {
-                                                  return(<div key={Math.random()} className="hidden-pages">{page}</div>);
-                                              } else {
-                                                  return (<div key={Math.random()} className="playlist-page">{page}</div>);
-                                              }
-                                          })}
-                                          <div className="arrow forward">❯</div>
-                                      </div>
-                                      <div className="playlist-length">
-                                          <input
-                                              type="radio"
-                                              name="playlist-length"
-                                              id="playlist-length-10"
-                                              defaultChecked={true}
-                                              onChange={() => this.playlistLengthChange(10)}
-                                          />
-                                          <label htmlFor="playlist-length-10" className="playlist-length-item">10</label>
-                                          <input
-                                              type="radio"
-                                              name="playlist-length"
-                                              id="playlist-length-25"
-                                              onChange={() => this.playlistLengthChange(25)}
-                                          />
-                                          <label htmlFor="playlist-length-25" className="playlist-length-item">25</label>
-                                          <input
-                                              type="radio"
-                                              name="playlist-length"
-                                              id="playlist-length-50"
-                                              onChange={() => this.playlistLengthChange(50)}
-                                          />
-                                          <label htmlFor="playlist-length-50" className="playlist-length-item">50</label>
-                                          <input
-                                              type="radio"
-                                              name="playlist-length"
-                                              id="playlist-length-100"
-                                              onChange={() => this.playlistLengthChange(100)}
-                                          />
-                                          <label htmlFor="playlist-length-100" className="playlist-length-item">100</label>
-                                      </div>
-                                  </div>
+                                  <PlaylistFooterComponent switchBetweenPages={this.switchBetweenPages} playlistLengthChange={this.playlistLengthChange}
+                                                           pageDisplayed={this.state.pageDisplayed} activePage={this.state.activePage} />
                                   : null}
                           </div>
                       </div>
                   </div>
-                  <div className="filter">
-                      <div className="filter-title">Фильтр</div>
-                      <div className="filter-container">
-                          <div className="filter-item">
-                              <span className="filter-item-title">Исполнитель</span>
-                              <select onChange={(e)=>{this.filterPlaylist(e.target.value, 'singer')}}>
-                                  <option value="" hidden>Все</option>
-                                  {
-                                      this.state.singers.map((singer) => {
-                                          return (
-                                              <option key={Math.random()} value={singer}>{singer}</option>
-                                          )
-                                      })
-                                  }
-                              </select>
-                          </div>
-                          <div className="filter-item">
-                              <span className="filter-item-title">Жанр</span>
-                              <select onChange={(e)=>{this.filterPlaylist(e.target.value, 'genre')}}>
-                                  <option value="" hidden>Все</option>
-                                  {
-                                      this.state.genres.map((genre) => {
-                                          return (
-                                              <option key={genre} value={genre}>{genre}</option>
-                                          )
-                                      })
-                                  }
-                              </select>
-                          </div>
-                          <div className="filter-item">
-                              <span className="filter-item-title">Год</span>
-                              <select onChange={(e)=>{this.filterPlaylist(e.target.value, 'year')}}>
-                                  <option value="" hidden>Все</option>
-                                  {
-                                      this.state.years.map((year) => {
-                                          return (
-                                              <option key={year} value={year}>{year}</option>
-                                          )
-                                      })
-                                  }
-                              </select>
-                          </div>
-                      </div>
-                  </div>
+                  <FiltersComponent filterPlaylist={this.filterPlaylist} singers={this.state.singers}
+                                    genres={this.state.genres} years={this.state.years} />
               </div>
               : null}
       </div>
