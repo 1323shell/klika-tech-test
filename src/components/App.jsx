@@ -615,7 +615,7 @@ class App extends Component {
                   <FiltersComponent filterPlaylist={this.filterPlaylist} singers={this.state.singers}
                                     genres={this.state.genres} years={this.state.years} />
               </div>
-              : null}
+              : <div className="loader"></div>}
       </div>
     );
   }
